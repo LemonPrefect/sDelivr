@@ -1,0 +1,45 @@
+/*
+MediaWiki:Common.css
+*/
+/* 
+ * 源自萌娘百科 http://zh.moegirl.org/MediaWiki:Common.css
+ * 版权协定：知识共享 署名-非商业性使用-相同方式共享 3.0
+ */
+/* 黑幕模板配合CSS */
+/* 把这几行单独拎出来写，否则会被Firefox合并到“.heimu a”这条规则，然后又被上面的“点过外链不变色”规则override */
+span.heimu a.external,
+span.heimu a.external:visited,
+span.heimu a.extiw,
+span.heimu a.extiw:visited {
+    color: #252525;
+}
+.heimu,
+.heimu a,
+a .heimu,
+.heimu a.new {
+    background-color: #252525;
+    color: #252525;
+    text-shadow: none;
+}
+body:not(.heimu_toggle_on) .heimu:hover,
+body:not(.heimu_toggle_on) .heimu:active,
+body:not(.heimu_toggle_on) .heimu.off {
+    transition: color .13s linear;
+    color: white;
+}
+body:not(.heimu_toggle_on) .heimu:hover a,
+body:not(.heimu_toggle_on) a:hover .heimu,
+body:not(.heimu_toggle_on) .heimu.off a,
+body:not(.heimu_toggle_on) a:hover .heimu.off {
+    transition: color .13s linear;
+    color: lightblue;
+}
+body:not(.heimu_toggle_on) .heimu.off .new,
+body:not(.heimu_toggle_on) .heimu.off .new:hover,
+body:not(.heimu_toggle_on) .new:hover .heimu.off,
+body:not(.heimu_toggle_on) .heimu.off .new,
+body:not(.heimu_toggle_on) .heimu.off .new:hover,
+body:not(.heimu_toggle_on) .new:hover .heimu.off {
+    transition: color .13s linear;
+    color: #BA0000;
+}

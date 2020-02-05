@@ -1,0 +1,33 @@
+/*
+* 主题色来自于Microsoft Edge的pdf批注色及其修改、微信读书、WKT7
+* Version alpha
+* 版权协定：知识共享 署名-非商业性使用-相同方式共享 4.0
+*/
+.HighlightEdgeBlue{
+    background: rgb(166, 230, 255);
+    padding: 0px 0px;
+}
+.HighlightEdgeYellow{
+    background: rgb(255, 243, 128);
+    padding: 0px 0px;
+}
+.HighlightEdgeGreen{
+    background: rgb(141, 243, 128,0.8);
+    padding: 0px 0px;
+}
+.HighlightEdgeRed{
+    background: rgb(243, 128, 192,0.8);
+    padding: 0px 0px;
+}
+.HighlightWechatOrange{
+    background: rgb(251, 223, 173);
+    padding: 0px 0px;
+}
+.HighlightWKT7BlueGreen{
+    background: rgb(177, 227, 228);
+    padding: 0px 0px;
+}
+.HighlightWKT7Brown{
+    background: rgb(190, 114, 18,0.6);
+    padding: 0px 0px;
+}
