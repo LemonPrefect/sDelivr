@@ -1,0 +1,38 @@
+.friendLink-card {
+	height: 97px;
+	width: 10086px;
+}
+
+.friendLink-img {
+	position: relative;
+}
+
+.friendLink-img img {
+	position: absolute;
+	top: 6px;
+	width: 85px;
+}
+
+.friendLink-nickname {
+	margin-top: 6px;
+	margin-left: 100px;
+	padding-bottom: 3px;
+	width: auto;
+	overflow: hidden;
+}
+
+.friendLink-description {
+	height: 43px;
+	color: grey;
+	font-size: 10px;
+	margin-left: 100px;
+	overflow: hidden;
+	text-align: left;
+}
+
+.friendLink-url {
+	text-align: right;
+	margin-right: 0px;
+	float: right;
+	overflow: hidden;
+}
