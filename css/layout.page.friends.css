@@ -1,0 +1,19 @@
+.friendLink-Area{
+    margin-top: 6px;
+    text-align: center;
+}
+.friendLink-Area a{
+    color: #363636;
+}
+.friendLink-square{
+    margin-top: 4px !important;
+    width: 280px;
+    height: 110px;
+    display: inline-block;
+    padding: 0.5em 0.75em;
+}
+.friendLink-square:hover{
+    background-color: #f5f5f5;
+    background: #f5f5f5;
+
+}
