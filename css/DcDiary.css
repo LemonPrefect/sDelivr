@@ -91,6 +91,7 @@ DiaryBody a:hover{
 }
 a{
     text-decoration: none;
+    color:#939393;
 }
 DiaryBody code,
 DiaryBody pre{
