@@ -37,6 +37,8 @@ DiaryTail div{
     color: #939393;
     text-align: center;
     margin: 10px;
+    height:20px;
+    line-height:20px;
 }
 
 /* Container */
@@ -76,28 +78,31 @@ Container hr{
 }
 
 /* Effcts */
-a{
-  word-wrap: break-word;
-  color: #4a4a4a;
-  transition: 0.3s ease-out 0s;
-  border-bottom: 2px solid #f3f3f3;
-  text-decoration: none;
+DiaryBody a{
+    word-wrap: break-word;
+    color: #4a4a4a;
+    transition: 0.3s ease-out 0s;
+    border-bottom: 2px solid #f3f3f3;
+    text-decoration: none;
 }
-a:hover{
-  color: #00218c;
-  border-bottom: 2px solid #5373dc;
+DiaryBody a:hover{
+    color: #00218c;
+    border-bottom: 2px solid #5373dc;
+}
+a{
+    text-decoration: none;
 }
 DiaryBody code,
 DiaryBody pre{
-  font-size: 1rem;
-  font-family: "JetBrains Mono", "Noto Mono", Consolas;
+    font-size: 1rem;
+    font-family: "JetBrains Mono", "Noto Mono", Consolas;
 }
 DiaryBody code{
-  color: rgba(116,113,114,0.922);
-  background: #f3f3f3;
-  margin: 2px 3px 2px 3px;
-  padding: 0px 2px 0px 2px;
-  font-family: "JetBrains Mono", "Noto Mono", Consolas;
+    color: rgba(116,113,114,0.922);
+    background: #f3f3f3;
+    margin: 2px 3px 2px 3px;
+    padding: 0px 2px 0px 2px;
+    font-family: "JetBrains Mono", "Noto Mono", Consolas;
 }
 DiaryBody pre{
     font-weight: initial;
