@@ -89,6 +89,9 @@ DiaryBody a:hover{
     color: #00218c;
     border-bottom: 2px solid #5373dc;
 }
+DiaryBody ::selection{
+    background: #c7d3db;
+}
 a{
     text-decoration: none;
     color:#939393;
