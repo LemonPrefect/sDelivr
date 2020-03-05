@@ -12,7 +12,7 @@ data = "RY23/" + data;
 $.ajax({
     type : "GET",
     async : false,
-    url: "http://api.lemonprefect.cn/?" + data,
+    url: "https://api.lemonprefect.cn/?" + data,
     success : function(data) {
         console.log("PV Added");
     },
