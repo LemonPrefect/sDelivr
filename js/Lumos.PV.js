@@ -5,10 +5,8 @@ details["PASSAGE_TITLE"] = document.title;
 details["IP_ADDRESS"] = returnCitySN["cip"];
 details["LOCATION"] = returnCitySN["cname"];
 data = JSON.stringify(details);
-console.log(data);
 data = BASE64.encode(data);
-console.log(data);
-data = "23RY/" + data;
+data = "RY23/" + data;
 
 
 $.ajax({
