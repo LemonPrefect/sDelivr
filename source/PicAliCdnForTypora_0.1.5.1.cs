@@ -1,15 +1,16 @@
 ﻿﻿/*
-* PicAliCdnForTypora Ver 0.1.5.0
+* PicAliCdnForTypora Ver 0.1.5.1
 * Author: LemonPrefect
 * E-mail: jingzhuokwok@qq.com
 * Github: @LemonPrefect
 * Website: https://LemonPrefect.cn
-* Updated: 202004091624 Asia/Shanghai                                
+* Updated: 202004092256 Asia/Shanghai                                
 */
 using System;
 using System.IO;
+using System.Net;
 using System.Text;
-using  Flurl.Http;
+using Flurl.Http;
 using System.Threading;
 using Newtonsoft.Json.Linq;
 
@@ -18,7 +19,7 @@ namespace PicAlicdnForTypora {
         const int REST_PER_REQUEST = 300;
         const int RETRY_PER_FAILED_REQUEST = 5;
         
-        public class EquivocalUtf8EncodingProvider : EncodingProvider {
+        public class EquivocalUtf8EncodingProvider : EncodingProvider { //Make the utf8 from response Content-Type into utf-8
             public override Encoding GetEncoding(string name){
                 return name == "utf8" ? Encoding.UTF8 : null;
             }
@@ -47,13 +48,25 @@ namespace PicAlicdnForTypora {
                     Console.WriteLine("Error:File  File to upload is not exist");
                     Thread.CurrentThread.Abort();
                 }
+                
+                //Read the file into stream for upload to prevent the unsupported characters from making the upload fail
+                FileStream uploadImg = new FileStream(args[i],FileMode.Open,FileAccess.Read, FileShare.Read);
+                byte[] bytesImg = new byte[uploadImg.Length];
+                uploadImg.Read(bytesImg, 0, bytesImg.Length);
+                uploadImg.Close();
+                Stream uploadImgStream = new MemoryStream(bytesImg);
+                
                 var uploadRespose = uploadUrl.WithHeaders(new {
                     User_Agent = userAgents[randomNum.Next(4)],
                     Client_IP = randomNum.Next(192) + "." + randomNum.Next(255) + "." + randomNum.Next(255) + "." + randomNum.Next(255)
                 }).PostMultipartAsync(data => 
                     data.AddString("file","multipart")
-                        .AddFile("Filedata",args[i])
+                        .AddFile("Filedata",uploadImgStream,WebUtility.UrlEncode(args[i]))
                 ).Result;
+                
+                uploadImgStream.Dispose();
+                
+                //Try to catch some exceptions when uploaded failed and abort the thread
                 if (uploadRespose.StatusCode != 200){
                     ExceptionController(ref flagRetry, ref i, "Error:Device.Network  Failed to upload file for 5 times");
                     continue;
@@ -63,6 +76,8 @@ namespace PicAlicdnForTypora {
                     ExceptionController(ref flagRetry, ref i, "Error:API-BtPanel  Failed to upload file for 5 times as the file is forbidden");
                     continue;
                 }
+                
+                //Convert the response data into a Json Object
                 JObject responseDataParsed = JObject.Parse(responseData);
                 if ((string) responseDataParsed["code"] != "1"){
                     ExceptionController(ref flagRetry, ref i, "Error:API  Failed to upload file for 5 times");
@@ -73,11 +88,11 @@ namespace PicAlicdnForTypora {
                 Thread.Sleep(REST_PER_REQUEST);
             }
             Console.WriteLine("Upload Success:");
-            for (int i = 0; i < imageQuantity; i++){
+            for (int i = 0; i < imageQuantity; i++){ //Output Urls as demanded
                 Console.WriteLine(fetchedUrl[i]);
             }
         }
-        internal static void ExceptionController(ref int flagRetry,ref int i,string exceptionMessage){
+        internal static void ExceptionController(ref int flagRetry,ref int i,string exceptionMessage){//Receive and process the exceptions
             if (flagRetry == RETRY_PER_FAILED_REQUEST){
                 Console.WriteLine(exceptionMessage);
                 Thread.CurrentThread.Abort();

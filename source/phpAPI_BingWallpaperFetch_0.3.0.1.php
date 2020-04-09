@@ -1,6 +1,6 @@
 ﻿<?php
 /*
-* phpAPI_BingWallpaperFetch Ver 0.3.0.0
+* phpAPI_BingWallpaperFetch Ver 0.3.0.1
 * Author: LemonPrefect
 * E-mail: jingzhuokwok@qq.com
 * Github: @LemonPrefect
@@ -83,7 +83,7 @@ class InternalFunctions{
         $imageNew['Title'] = $imageTitle;
         $imageNew['StartDate'] = $imageStartDate;
         $imageNew['EndDate'] = $imageEndDate;
-        $imageNew['Url'] = "https://cn.bing.com".$imageUrlbase."_".$resolution.".jpg";;
+        $imageNew['Url'] = "https://cn.bing.com".$imageUrlbase."_".$resolution.".jpg";
         $imageNew['Copyright'] = $imageCopyright;
         $imageNew['hsh'] = $imagehsh;
         $wallpaperDetails = json_encode($imageNew);
