@@ -1,5 +1,5 @@
 ﻿﻿/*
-* PicAliCdnForTypora Ver 0.1.5.1
+* PicAliCdnForTypora Ver 0.1.5.2 .Net Framework 4.6+
 * Author: LemonPrefect
 * E-mail: jingzhuokwok@qq.com
 * Github: @LemonPrefect
@@ -44,11 +44,23 @@ namespace PicAlicdnForTypora {
                 "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; TencentTraveler 4.0)"
             };
             for (int i = 0; i < imageQuantity; i++){
+                
+                //For those images already on the website which needn't to be uploaded
+                if (args[i].Contains("http://") || args[i].Contains("https://") || args[i].Contains("ftp://")){
+                    fetchedUrl[i] = args[i];
+                    continue;
+                }
+                
+                //For inserting image with 'file:///' which will be strip into '/'
+                if ('/' == args[i][0]){
+                    args[i] = args[i].Substring(1);
+                }
+
                 if (File.Exists(args[i]) == false){
                     Console.WriteLine("Error:File  File to upload is not exist");
                     Thread.CurrentThread.Abort();
                 }
-                
+
                 //Read the file into stream for upload to prevent the unsupported characters from making the upload fail
                 FileStream uploadImg = new FileStream(args[i],FileMode.Open,FileAccess.Read, FileShare.Read);
                 byte[] bytesImg = new byte[uploadImg.Length];
