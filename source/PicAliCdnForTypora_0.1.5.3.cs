@@ -1,15 +1,13 @@
 ﻿﻿/*
-* PicAliCdnForTypora Ver 0.1.5.2 .Net Framework 4.6+
+* PicAliCdnForTypora Ver 0.1.5.3 .Net Framework 4.6+ / .Net Core 3.1+ Build Swelling Sugar PreRelease
 * Author: LemonPrefect
 * E-mail: jingzhuokwok@qq.com
 * Github: @LemonPrefect
 * Website: https://LemonPrefect.cn
-* Updated: 202004092256 Asia/Shanghai                                
+* Updated: 202004131731 Asia/Shanghai                                
 */
 using System;
 using System.IO;
-using System.Net;
-using System.Text;
 using Flurl.Http;
 using System.Threading;
 using Newtonsoft.Json.Linq;
@@ -19,30 +17,14 @@ namespace PicAlicdnForTypora {
         const int REST_PER_REQUEST = 300;
         const int RETRY_PER_FAILED_REQUEST = 5;
         
-        public class EquivocalUtf8EncodingProvider : EncodingProvider { //Make the utf8 from response Content-Type into utf-8
-            public override Encoding GetEncoding(string name){
-                return name == "utf8" ? Encoding.UTF8 : null;
-            }
-            public override Encoding GetEncoding(int codepage){
-                return null;
-            }
-        }
         
         public static void Main(string[] args){
             Random randomNum = new Random();
-            EncodingProvider provider = new EquivocalUtf8EncodingProvider();
-            Encoding.RegisterProvider(provider);
             int imageQuantity = args.Length;
-            string uploadUrl = "http://api.uomg.com/api/image.ali";
+            string uploadUrl = "https://kfupload.alibaba.com/mupload";
             string[] fetchedUrl = new string[imageQuantity];
             int flagRetry = 0;
-            string[] userAgents = {
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11",
-                "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; en) Presto/2.8.131 Version/11.11",
-                "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; SE 2.X MetaSr 1.0; SE 2.X MetaSr 1.0; .NET CLR 2.0.50727; SE 2.X MetaSr 1.0)",
-                "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; TencentTraveler 4.0)"
-            };
+            
             for (int i = 0; i < imageQuantity; i++){
                 
                 //For those images already on the website which needn't to be uploaded
@@ -69,11 +51,12 @@ namespace PicAlicdnForTypora {
                 Stream uploadImgStream = new MemoryStream(bytesImg);
                 
                 var uploadRespose = uploadUrl.WithHeaders(new {
-                    User_Agent = userAgents[randomNum.Next(4)],
+                    User_Agent = "iAliexpress/6.22.1 (iPhone; iOS 12.1.2; Scale/2.00)",
                     Client_IP = randomNum.Next(192) + "." + randomNum.Next(255) + "." + randomNum.Next(255) + "." + randomNum.Next(255)
                 }).PostMultipartAsync(data => 
-                    data.AddString("file","multipart")
-                        .AddFile("Filedata",uploadImgStream,WebUtility.UrlEncode(args[i]))
+                    data.AddString("scene","aeMessageCenterV2ImageRule")
+                        .AddString("name",randomNum.Next(65536) + Path.GetExtension(args[i]))
+                        .AddFile("file",uploadImgStream,randomNum.Next(65536) + Path.GetExtension(args[i]),"image/" + Path.GetExtension(args[i]).Substring(1))
                 ).Result;
                 
                 uploadImgStream.Dispose();
@@ -83,19 +66,16 @@ namespace PicAlicdnForTypora {
                     ExceptionController(ref flagRetry, ref i, "Error:Device.Network  Failed to upload file for 5 times");
                     continue;
                 }
-                string responseData = uploadRespose.ResponseMessage.Content.ReadAsStringAsync().Result;
-                if (responseData.Contains("不符合文件上传的标准")){
-                    ExceptionController(ref flagRetry, ref i, "Error:API-BtPanel  Failed to upload file for 5 times as the file is forbidden");
-                    continue;
-                }
                 
+                string responseData = uploadRespose.ResponseMessage.Content.ReadAsStringAsync().Result;
+
                 //Convert the response data into a Json Object
                 JObject responseDataParsed = JObject.Parse(responseData);
-                if ((string) responseDataParsed["code"] != "1"){
+                if ((string) responseDataParsed["code"] != "0"){
                     ExceptionController(ref flagRetry, ref i, "Error:API  Failed to upload file for 5 times");
                     continue;
                 }
-                fetchedUrl[i] = (string)responseDataParsed["imgurl"];
+                fetchedUrl[i] = (string)responseDataParsed["url"];
                 flagRetry = 0;
                 Thread.Sleep(REST_PER_REQUEST);
             }
